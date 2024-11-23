@@ -1,9 +1,8 @@
+use std::{env, sync::Arc};
+
 use anyhow::Result;
 use futures::FutureExt;
-use platform_bot_service::executor::executor::ExecutorSystem;
-use platform_bot_service::jobs::{clean, exchange};
 use sqlx::sqlite::SqlitePoolOptions;
-use std::{env, sync::Arc};
 use tokio::signal;
 use tokio_util::sync::CancellationToken;
 use tracing::{error, info, subscriber};
@@ -11,13 +10,16 @@ use tracing_bunyan_formatter::BunyanFormattingLayer;
 use tracing_log::LogTracer;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter};
 
+use team_bot_service::executor::executor::ExecutorSystem;
+use team_bot_service::jobs::{clean, exchange};
+
 mod utils;
 
 #[tokio::main]
 async fn main() -> Result<()> {
   dotenvy::dotenv().ok();
 
-  let log_level = env::var("PLATFORM_BOT_LOG_LEVEL").expect("PLATFORM_BOT_LOG_LEVEL is not set in .env file");
+  let log_level = env::var("TEAM_BOT_LOG_LEVEL").expect("TEAM_BOT_LOG_LEVEL is not set in .env file");
   let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
 
   let file_appender = tracing_appender::rolling::daily("logs", "app.log");
@@ -78,7 +80,7 @@ async fn main() -> Result<()> {
 
   if let Err(err) = utils::join_all(
     vec![
-      platform_bot_api::run(shared_pool.clone(), cancel_token.clone()).boxed(),
+      team_bot_api::run(shared_pool.clone(), cancel_token.clone()).boxed(),
       exchange::run(shared_pool.clone(), cancel_token.clone()).boxed(),
       clean::run(shared_pool.clone(), cancel_token.clone()).boxed(),
       executor_system.run(cancel_token.clone()).boxed(),

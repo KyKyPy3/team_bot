@@ -8,7 +8,7 @@ use tracing::{debug, error, instrument};
 
 use super::Worker;
 use crate::executor::actions::{zulip::ZULIP, Action, ActionSystem};
-use platform_bot_entity::task::Task;
+use team_bot_entity::task::Task;
 
 #[derive(Debug, Error)]
 pub enum NotifierError {
@@ -115,9 +115,10 @@ fn get_config_value(task: &Task, key: &str) -> Option<Value> {
 mod tests {
   use super::*;
   use chrono::Utc;
-  use platform_bot_entity::project::ProjectRow;
   use serde_json::json;
   use uuid::Uuid;
+
+  use team_bot_entity::project::ProjectRow;
 
   #[test]
   fn test_get_config_value() {

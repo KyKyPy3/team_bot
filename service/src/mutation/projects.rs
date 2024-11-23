@@ -4,7 +4,7 @@ use sqlx::SqlitePool;
 use uuid::Uuid;
 
 use crate::{error::ServiceError, ServiceResult};
-use platform_bot_entity::{
+use team_bot_entity::{
   project::{Project, ProjectRow},
   user::User,
 };

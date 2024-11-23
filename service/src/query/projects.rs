@@ -1,7 +1,7 @@
 use sqlx::{sqlite::SqliteRow, Row, SqlitePool};
 
 use crate::ServiceResult;
-use platform_bot_entity::{
+use team_bot_entity::{
   project::{Project, ProjectRow},
   user::User,
 };

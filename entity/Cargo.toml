@@ -1,5 +1,5 @@
 [package]
-name = "platform-bot-entity"
+name = "team-bot-entity"
 version = "0.1.0"
 authors = ["Old Punk <roman.efremenko@gmail.com>"]
 edition = "2021"

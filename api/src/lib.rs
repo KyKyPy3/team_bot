@@ -1,24 +1,29 @@
 use std::{env, sync::Arc};
 
 use axum::extract::{FromRequest, State};
-use axum::http::header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE};
-use axum::http::{HeaderValue, Method};
+use axum::http::{
+  header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
+  HeaderValue, Method,
+};
 use axum::{response::IntoResponse, routing::get};
-use error::ApiError;
-use projects::init_projects_routes;
 use serde_json::json;
 use sqlx::SqlitePool;
-use tasks::init_tasks_routes;
 use tokio::net::TcpListener;
 use tokio_util::sync::CancellationToken;
 use tower_cookies::CookieManagerLayer;
-use tower_http::cors::CorsLayer;
-use tower_http::services::{ServeDir, ServeFile};
+use tower_http::{
+  cors::CorsLayer,
+  services::{ServeDir, ServeFile},
+};
 use tracing::info;
-use users::init_users_routes;
 use utoipa::OpenApi;
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_swagger_ui::SwaggerUi;
+
+use error::ApiError;
+use projects::init_projects_routes;
+use tasks::init_tasks_routes;
+use users::init_users_routes;
 
 mod auth;
 mod error;
@@ -26,7 +31,7 @@ mod projects;
 mod tasks;
 mod users;
 
-const PLATFORM_BOT_TAG: &str = "platform_bot";
+const TEAM_BOT_TAG: &str = "team_bot";
 
 pub type ApiResult<T = ()> = Result<T, ApiError>;
 
@@ -68,7 +73,7 @@ pub async fn run(state: Arc<SqlitePool>, cancel_token: CancellationToken) -> any
   #[derive(OpenApi)]
   #[openapi(
     tags(
-      (name = PLATFORM_BOT_TAG, description = "Bot management API")
+      (name = TEAM_BOT_TAG, description = "Bot management API")
     )
   )]
   struct ApiDoc;

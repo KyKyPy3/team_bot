@@ -13,7 +13,7 @@ use crate::executor::{
   actions::{zulip::ZULIP, Action, ActionSystem},
   workers::Worker,
 };
-use platform_bot_entity::task::Task;
+use team_bot_entity::task::Task;
 
 const GERRIT_RESPONSE_PREFIX: &str = ")]}'";
 const CONNECTION_TIMEOUT: Duration = Duration::from_secs(1024);

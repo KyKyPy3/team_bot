@@ -18,8 +18,8 @@ use uuid::Uuid;
 use validator::Validate;
 
 use crate::{auth::auth_guard, ApiResult, AppJson};
-use platform_bot_entity::project::Project;
-use platform_bot_service::{mutation, query};
+use team_bot_entity::project::Project;
+use team_bot_service::{mutation, query};
 
 const PROJECTS_TAG: &str = "projects";
 const DEFAULT_PAGE: i64 = 1;

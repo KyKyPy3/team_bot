@@ -10,7 +10,7 @@ use tracing::{error, info};
 use uuid::Uuid;
 
 use crate::{error::ServiceError, ServiceResult};
-use platform_bot_entity::user::User;
+use team_bot_entity::user::User;
 
 const FIND_USER_BY_EMAIL: &str = "SELECT * FROM users WHERE email = ?1";
 const FIND_USER_BY_USERNAME: &str = "SELECT * FROM users WHERE username = ?1";

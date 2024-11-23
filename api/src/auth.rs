@@ -16,7 +16,7 @@ use tracing::debug;
 use uuid::Uuid;
 
 use crate::error::ApiError;
-use platform_bot_service::query;
+use team_bot_service::query;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {

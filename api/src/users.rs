@@ -26,9 +26,9 @@ use crate::{
   auth::{auth_guard, encode_jwt},
   ApiResult, AppJson,
 };
-use platform_bot_entity::user::User;
-use platform_bot_service::mutation;
-use platform_bot_service::query;
+use team_bot_entity::user::User;
+use team_bot_service::mutation;
+use team_bot_service::query;
 
 const USERS_TAG: &str = "users";
 const AUTH_COOKIE_NAME: &str = "token";

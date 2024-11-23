@@ -2,7 +2,7 @@ use sqlx::SqlitePool;
 use uuid::Uuid;
 
 use crate::ServiceResult;
-use platform_bot_entity::user::User;
+use team_bot_entity::user::User;
 
 const LIST_USERS_QUERY: &str = "SELECT * FROM users ORDER BY id LIMIT ? OFFSET ?";
 const FIND_USER_BY_ID_QUERY: &str = "SELECT * FROM users WHERE id = ?1";

@@ -21,8 +21,8 @@ use uuid::Uuid;
 use validator::Validate;
 
 use crate::{auth::auth_guard, error::ApiError, ApiResult, AppJson};
-use platform_bot_entity::task::Task;
-use platform_bot_service::{mutation, query};
+use team_bot_entity::task::Task;
+use team_bot_service::{mutation, query};
 
 const TASKS_TAG: &str = "tasks";
 const DEFAULT_PAGE: i64 = 1;

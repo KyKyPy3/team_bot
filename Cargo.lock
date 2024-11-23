@@ -1850,99 +1850,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "953ec861398dccce10c670dfeaf3ec4911ca479e9c02154b3a215178c5f566f2"
 
 [[package]]
-name = "platform-bot-api"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "axum",
- "axum-extra",
- "chrono",
- "cron 0.13.0",
- "duration-str",
- "jsonwebtoken",
- "once_cell",
- "platform-bot-entity",
- "platform-bot-service",
- "secrecy",
- "serde",
- "serde_json",
- "sqlx",
- "thiserror 2.0.3",
- "tokio",
- "tokio-util",
- "tower-cookies",
- "tower-http",
- "tracing",
- "utoipa",
- "utoipa-axum",
- "utoipa-swagger-ui",
- "uuid",
- "validator",
-]
-
-[[package]]
-name = "platform-bot-entity"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serde",
- "serde_json",
- "sqlx",
- "utoipa",
- "uuid",
-]
-
-[[package]]
-name = "platform-bot-service"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "argon2",
- "async-trait",
- "chrono",
- "chrono-tz",
- "cron 0.12.1",
- "curl",
- "duration-str",
- "futures",
- "mini-moka",
- "platform-bot-entity",
- "rand_core",
- "regex",
- "reqwest",
- "secrecy",
- "serde",
- "serde_json",
- "sqlx",
- "strfmt",
- "thiserror 2.0.3",
- "tokio",
- "tokio-util",
- "tracing",
- "utoipa",
- "uuid",
-]
-
-[[package]]
-name = "platform_bot"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "dotenvy",
- "futures",
- "platform-bot-api",
- "platform-bot-service",
- "sqlx",
- "tokio",
- "tokio-util",
- "tracing",
- "tracing-appender",
- "tracing-bunyan-formatter",
- "tracing-log 0.2.0",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "powerfmt"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2856,6 +2763,99 @@ name = "tagptr"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b2093cf4c8eb1e67749a6762251bc9cd836b6fc171623bd0a9d324d37af2417"
+
+[[package]]
+name = "team-bot-api"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "axum-extra",
+ "chrono",
+ "cron 0.13.0",
+ "duration-str",
+ "jsonwebtoken",
+ "once_cell",
+ "secrecy",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "team-bot-entity",
+ "team-bot-service",
+ "thiserror 2.0.3",
+ "tokio",
+ "tokio-util",
+ "tower-cookies",
+ "tower-http",
+ "tracing",
+ "utoipa",
+ "utoipa-axum",
+ "utoipa-swagger-ui",
+ "uuid",
+ "validator",
+]
+
+[[package]]
+name = "team-bot-entity"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "utoipa",
+ "uuid",
+]
+
+[[package]]
+name = "team-bot-service"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "argon2",
+ "async-trait",
+ "chrono",
+ "chrono-tz",
+ "cron 0.12.1",
+ "curl",
+ "duration-str",
+ "futures",
+ "mini-moka",
+ "rand_core",
+ "regex",
+ "reqwest",
+ "secrecy",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "strfmt",
+ "team-bot-entity",
+ "thiserror 2.0.3",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "utoipa",
+ "uuid",
+]
+
+[[package]]
+name = "team_bot"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dotenvy",
+ "futures",
+ "sqlx",
+ "team-bot-api",
+ "team-bot-service",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-appender",
+ "tracing-bunyan-formatter",
+ "tracing-log 0.2.0",
+ "tracing-subscriber",
+]
 
 [[package]]
 name = "tempfile"

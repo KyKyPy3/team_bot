@@ -1,7 +1,7 @@
 use sqlx::{sqlite::SqliteRow, Row, SqlitePool};
 
 use crate::ServiceResult;
-use platform_bot_entity::{project::ProjectRow, task::Task};
+use team_bot_entity::{project::ProjectRow, task::Task};
 
 const LIST_TASKS_QUERY: &str = r#"
   SELECT

@@ -1,5 +1,5 @@
 [package]
-name = "platform-bot-service"
+name = "team-bot-service"
 version = "0.1.0"
 authors = ["Old Punk <roman.efremenko@gmail.com>"]
 edition = "2021"
@@ -34,4 +34,4 @@ tracing = { version = "0.1.40", features = ["attributes"] }
 regex = "1.11.1"
 utoipa = { version = "5.2.0" }
 uuid = { version = "1.11.0", features = ["serde", "v4"] }
-platform-bot-entity = { path = "../entity" }
+team-bot-entity = { path = "../entity" }

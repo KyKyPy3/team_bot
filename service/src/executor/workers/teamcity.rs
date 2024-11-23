@@ -10,9 +10,11 @@ use strfmt::strfmt;
 use thiserror::Error;
 use tracing::{debug, error, instrument, warn};
 
-use crate::executor::actions::{zulip::ZULIP, Action, ActionSystem};
-use crate::executor::workers::Worker;
-use platform_bot_entity::task::Task;
+use crate::executor::{
+  actions::{zulip::ZULIP, Action, ActionSystem},
+  workers::Worker,
+};
+use team_bot_entity::task::Task;
 
 const CONNECTION_TIMEOUT: Duration = Duration::from_secs(1024);
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(15);

@@ -4,7 +4,7 @@ use axum::{http::StatusCode, Json};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-use platform_bot_service::error::ServiceError;
+use team_bot_service::error::ServiceError;
 
 #[derive(Debug, Error)]
 pub enum ApiError {
@@ -64,13 +64,13 @@ impl ApiError {
           .collect(),
         StatusCode::BAD_REQUEST,
       ),
-      InvalidSchedule(err) => (
+      InvalidSchedule(_) => (
         "INTERNAL_SERVER_ERROR".to_string(),
         None,
         vec![],
         StatusCode::INTERNAL_SERVER_ERROR,
       ),
-      ScheduleCalculation(err) => (
+      ScheduleCalculation(_) => (
         "INTERNAL_SERVER_ERROR".to_string(),
         None,
         vec![],

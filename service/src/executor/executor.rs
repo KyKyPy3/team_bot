@@ -22,7 +22,7 @@ use crate::{
   },
   mutation, query,
 };
-use platform_bot_entity::task::Task;
+use team_bot_entity::task::Task;
 
 const QUERY_TIMEOUT: Duration = Duration::from_secs(5);
 const CHANNEL_CAPACITY: usize = 500;
