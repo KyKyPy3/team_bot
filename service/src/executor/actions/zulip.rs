@@ -91,7 +91,7 @@ impl ZulipClient {
     Ok(Self { options, http_client })
   }
 
-  #[instrument(skip(self))]
+  #[instrument(level = "debug", skip(self))]
   async fn send_with_retry(&self, msg: Msg, max_retries: u32) -> Result<(), RequestError> {
     for attempt in 0..max_retries {
       match self.send_message(msg.clone()).await {
@@ -106,7 +106,7 @@ impl ZulipClient {
     Err(RequestError::MaxRetriesExceeded)
   }
 
-  #[instrument(skip(self))]
+  #[instrument(level = "debug", skip(self))]
   async fn send_message(&self, msg: Msg) -> Result<(), RequestError> {
     let topic = msg.topic.unwrap_or_default();
     let query = [
@@ -178,7 +178,7 @@ impl ZulipOutput {
 
 #[async_trait]
 impl ActionAtom for ZulipOutput {
-  #[instrument(skip(self, cancel_token))]
+  #[instrument(level = "debug", skip(self, cancel_token))]
   async fn run(&self, cancel_token: CancellationToken) -> Result<()> {
     let semaphore = Arc::new(Semaphore::new(self.client.options.max_request));
     let receiver = self.receiver.clone();
@@ -209,7 +209,7 @@ impl ActionAtom for ZulipOutput {
     Ok(())
   }
 
-  #[instrument(skip(self, action))]
+  #[instrument(level = "debug", skip(self, action))]
   async fn process_action(&self, action: Action) -> Result<()> {
     let (tx, rx) = oneshot::channel();
     let msg: Msg = serde_json::from_str(&action.options)?;

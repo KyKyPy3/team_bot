@@ -198,6 +198,7 @@ impl TeamCity {
 
 #[async_trait]
 impl Worker for TeamCity {
+  #[instrument(level = "debug", skip(self), fields(task_id = %task.id, task_name = %task.name))]
   async fn execute(&self, task: &Task) -> Result<()> {
     debug!("Executing TeamCity for {}", task.id);
 
@@ -226,7 +227,7 @@ impl Worker for TeamCity {
 }
 
 /// Retrieves a configuration value from either task or project settings
-#[instrument(skip(task))]
+#[instrument(level = "debug", skip(task))]
 fn get_config_value(task: &Task, key: &str) -> Option<Value> {
   task
     .options

@@ -218,7 +218,7 @@ impl Gerrit {
 
 #[async_trait]
 impl Worker for Gerrit {
-  #[instrument(skip(self), fields(task_id = %task.id))]
+  #[instrument(level = "debug", skip(self), fields(task_id = %task.id))]
   async fn execute(&self, task: &Task) -> Result<()> {
     debug!("Starting Gerrit review check");
 
@@ -236,7 +236,7 @@ impl Worker for Gerrit {
 }
 
 /// Retrieves a configuration value from either task or project settings
-#[instrument(skip(task))]
+#[instrument(level = "debug", skip(task))]
 fn get_config_value(task: &Task, key: &str) -> Option<Value> {
   task
     .options

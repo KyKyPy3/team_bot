@@ -68,7 +68,7 @@ impl Notifier {
 
 #[async_trait]
 impl Worker for Notifier {
-  #[instrument(skip(self), fields(task_id = %task.id, task_name = %task.name))]
+  #[instrument(level = "debug", skip(self), fields(task_id = %task.id, task_name = %task.name))]
   async fn execute(&self, task: &Task) -> Result<()> {
     debug!("Executing Notifier for {}", task.id);
 
@@ -95,7 +95,7 @@ impl Worker for Notifier {
 /// # Returns
 /// * `Some(Value)` if the key exists in either task or project config
 /// * `None` if the key doesn't exist in either location
-#[instrument(skip(task))]
+#[instrument(level = "debug", skip(task))]
 fn get_config_value(task: &Task, key: &str) -> Option<Value> {
   // First try task-specific options
   if let Some(value) = task.options.get(key) {
