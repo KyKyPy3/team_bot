@@ -24,6 +24,6 @@ VALUES (
   X'01020304050607080910111213141516', -- Example UUID in hex
   'admin',
   'admin',
-  'admin@email.com',
-  '$argon2id$v=19$m=15000,t=2,p=1$djuoxA8cE0sWQy/yMhjvOA$1nPemwI5IfF5nvPTXgZVUhMXIXAezqm1+eueJR+r4e8'
+  'roman.efremenko@gmail.com',
+  '$argon2id$v=19$m=15000,t=2,p=1$EjS1EGef1aom/gJnrCD+5w$3aa/Q2tQai4DfipYxZ3h2Gh7Kdmj3gnAad1o0197jGs'
 );
