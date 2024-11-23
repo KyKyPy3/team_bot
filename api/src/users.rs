@@ -5,7 +5,6 @@ use axum::{
   http::{header, Response, StatusCode},
   middleware::from_fn_with_state,
   response::IntoResponse,
-  routing::{delete, get, post, put},
   Extension, Json,
 };
 use secrecy::SecretBox;
@@ -18,7 +17,7 @@ use tower_cookies::{
 };
 use tracing::{debug, instrument};
 use utoipa::{IntoParams, ToSchema};
-use utoipa_axum::router::OpenApiRouter;
+use utoipa_axum::{router::OpenApiRouter, routes};
 use uuid::Uuid;
 use validator::Validate;
 
@@ -35,18 +34,17 @@ const AUTH_COOKIE_NAME: &str = "token";
 const DEFAULT_PAGE_SIZE: i64 = 10;
 
 pub fn init_users_routes(state: Arc<SqlitePool>) -> OpenApiRouter<Arc<SqlitePool>> {
-  let public_routes = OpenApiRouter::new().route("/login", post(login));
+  let public_routes = OpenApiRouter::new().routes(routes!(login));
 
-  let protected_routes = OpenApiRouter::new()
-    .route("/me", get(get_me))
-    .route("/logout", post(logout))
-    .route("/", get(list_users))
-    .route("/", post(create_user))
-    .route("/:id", put(update_user))
-    .route("/:id", delete(delete_user))
+  let protected_auth_routes = OpenApiRouter::new()
+    .routes(routes!(get_me, logout))
     .layer(from_fn_with_state(state.clone(), auth_guard));
 
-  public_routes.merge(protected_routes)
+  let protected_users_routes = OpenApiRouter::new()
+    .routes(routes!(list_users, create_user, update_user, delete_user))
+    .layer(from_fn_with_state(state.clone(), auth_guard));
+
+  public_routes.merge(protected_auth_routes).merge(protected_users_routes)
 }
 
 #[derive(Debug, Deserialize, Validate, IntoParams)]
@@ -149,7 +147,7 @@ struct ListUsersParams {
     ListUsersParams
   ),
   responses(
-    (status = 200, description = "List all users successfully", body = Vec<User>),
+    (status = 200, description = "List all users successfully", body = [User]),
     (status = 401, description = "Unauthorized")
   )
 )]
