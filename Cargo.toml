@@ -1,0 +1,32 @@
+[package]
+name = "platform_bot"
+version = "0.1.0"
+authors = ["Old Punk <roman.efremenko@gmail.com>"]
+publish = false
+license = "MIT"
+edition = "2021"
+
+[workspace]
+members = [".", "api", "service", "entity"]
+
+[dependencies]
+anyhow = "1.0.93"
+dotenvy = "0.15.7"
+futures = "0.3.31"
+sqlx = { version = "0.8.2", features = [
+  "sqlite",
+  "runtime-tokio",
+  "tls-native-tls",
+] }
+tokio = { version = "1.41.1", features = ["full", "tracing"] }
+tokio-util = "0.7.12"
+tracing = { version = "0.1.40", features = ["attributes"] }
+tracing-appender = "0.2.3"
+tracing-bunyan-formatter = "0.3.9"
+tracing-log = "0.2.0"
+tracing-subscriber = { version = "0.3.18", features = [
+  "registry",
+  "env-filter",
+] }
+platform-bot-service = { path = "service" }
+platform-bot-api = { path = "api" }

@@ -1,0 +1,34 @@
+{
+  "num_workers": 10,
+  "workers": [
+    {
+      "name": "notify",
+      "options": {}
+    },
+    {
+      "name": "teamcity",
+      "options": {
+        "url": "https://<team_city_server>/guestAuth/app/rest"
+      }
+    },
+    {
+      "name": "gerrit",
+      "options": {
+        "url": "https://<gerrit_server>",
+        "login": "<login>",
+        "password": "<password>"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "zulip",
+      "options": {
+        "url": "https://<zulip_server>/api/v1/messages",
+        "login": "<login>",
+        "token": "<password>",
+        "max_request": 5
+      }
+    }
+  ]
+}
