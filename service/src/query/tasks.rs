@@ -22,6 +22,7 @@ const LIST_TASKS_QUERY: &str = r#"
     t.name as task_name,
     t.retries as task_retries,
     t.external_id as task_external_id,
+    t.external_modified_at as task_external_modified_at,
     t.created_at as task_created_at,
     t.updated_at as task_updated_at
   FROM tasks AS t
@@ -48,6 +49,7 @@ const RUNNABLE_TASKS_QUERY: &str = r#"
     t.name as task_name,
     t.retries as task_retries,
     t.external_id as task_external_id,
+    t.external_modified_at as task_external_modified_at,
     t.created_at as task_created_at,
     t.updated_at as task_updated_at
   FROM tasks AS t
@@ -120,6 +122,7 @@ fn map_task(row: SqliteRow) -> Task {
     name: row.get("task_name"),
     retries: row.get("task_retries"),
     external_id: row.get("task_external_id"),
+    external_modified_at: row.get("task_external_modified_at"),
     project: map_project_row(&row),
     created_at: row.get("task_created_at"),
     updated_at: row.get("task_updated_at"),

@@ -107,6 +107,7 @@ async fn create_task(
       r#type: input.r#type,
       project_id: input.project_id,
       external_id: None,
+      external_modified_at: None,
       schedule: input.schedule,
       start_at,
       options: input.options,

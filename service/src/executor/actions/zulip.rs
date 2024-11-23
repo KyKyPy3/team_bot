@@ -27,7 +27,7 @@ type MessageReceiver = Arc<Mutex<Receiver<MessageChannel>>>;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Msg {
-  pub topic: Option<String>,
+  pub topic: String,
   pub channel: String,
   pub message: String,
 }
@@ -108,11 +108,10 @@ impl ZulipClient {
 
   #[instrument(level = "debug", skip(self))]
   async fn send_message(&self, msg: Msg) -> Result<(), RequestError> {
-    let topic = msg.topic.unwrap_or_default();
     let query = [
       ("type", "stream"),
       ("to", &msg.channel),
-      ("topic", &topic),
+      ("topic", &msg.topic),
       ("content", &msg.message),
     ];
 

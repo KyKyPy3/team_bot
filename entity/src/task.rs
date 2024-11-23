@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, str::FromStr};
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 use crate::project::ProjectRow;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TaskStatus {
   New,
   InProgress,
@@ -30,6 +30,21 @@ impl fmt::Display for TaskStatus {
   }
 }
 
+impl FromStr for TaskStatus {
+  type Err = String;
+
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match s {
+      "new" => Ok(TaskStatus::New),
+      "in_progress" => Ok(TaskStatus::InProgress),
+      "retried" => Ok(TaskStatus::Retried),
+      "failed" => Ok(TaskStatus::Failed),
+      "finished" => Ok(TaskStatus::Finished),
+      _ => Err(format!("'{}' is not a valid variant", s)),
+    }
+  }
+}
+
 #[derive(Serialize, Deserialize, FromRow, Debug, Clone)]
 pub struct TaskRow {
   pub id: Uuid,
@@ -39,6 +54,7 @@ pub struct TaskRow {
   pub retries: i32,
   pub name: String,
   pub external_id: Option<String>,
+  pub external_modified_at: Option<DateTime<Utc>>,
   pub schedule: Option<String>,
   pub start_at: i32,
   pub options: Value,
@@ -55,6 +71,7 @@ pub struct Task {
   pub retries: i32,
   pub name: String,
   pub external_id: Option<String>,
+  pub external_modified_at: Option<DateTime<Utc>>,
   pub schedule: Option<String>,
   pub start_at: i32,
   pub options: Value,

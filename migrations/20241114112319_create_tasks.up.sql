@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `retries` INTEGER NOT NULL DEFAULT 0,
   `name` TEXT NOT NULL,
   `external_id` TEXT UNIQUE,
+  `external_modified_at` TIMESTAMP,
   `schedule` TEXT,
   `start_at` INTEGER NOT NULL,
   `options` TEXT NOT NULL DEFAULT '{}' CHECK(json_valid(options)),

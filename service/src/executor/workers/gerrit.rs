@@ -198,7 +198,8 @@ impl Gerrit {
   async fn send_notification(&self, task: &Task, message: String) -> Result<()> {
     let channel =
       get_config_value(task, "channel").ok_or_else(|| GerritError::MissingFieldError("channel".to_string()))?;
-    let topic = get_config_value(task, "topic");
+
+    let topic = get_config_value(task, "topic").ok_or_else(|| GerritError::MissingFieldError("topic".to_string()))?;
 
     self
       .action_system

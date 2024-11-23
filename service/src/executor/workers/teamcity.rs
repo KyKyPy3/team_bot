@@ -67,7 +67,7 @@ struct BuildStatusResponse {
 #[derive(Debug)]
 struct NotificationConfig {
   channel: Value,
-  topic: Option<Value>,
+  topic: Value,
 }
 
 pub struct TeamCity {
@@ -154,7 +154,7 @@ impl TeamCity {
     let channel =
       get_config_value(task, "channel").ok_or_else(|| TeamCityError::MissingFieldError("channel".to_string()))?;
 
-    let topic = get_config_value(task, "topic");
+    let topic = get_config_value(task, "topic").ok_or_else(|| TeamCityError::MissingFieldError("topic".to_string()))?;
 
     Ok(NotificationConfig { channel, topic })
   }

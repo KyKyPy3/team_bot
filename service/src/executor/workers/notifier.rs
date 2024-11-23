@@ -23,7 +23,7 @@ pub enum NotifierError {
 struct NotificationConfig {
   text: Value,
   channel: Value,
-  topic: Option<Value>,
+  topic: Value,
 }
 
 pub struct Notifier {
@@ -47,7 +47,7 @@ impl Notifier {
     let channel =
       get_config_value(task, "channel").ok_or_else(|| NotifierError::MissingFieldError("channel".to_string()))?;
 
-    let topic = get_config_value(task, "topic");
+    let topic = get_config_value(task, "topic").ok_or_else(|| NotifierError::MissingFieldError("topic".to_string()))?;
 
     Ok(NotificationConfig { text, channel, topic })
   }
@@ -131,6 +131,7 @@ mod tests {
         "text": "task specific text"
       }),
       external_id: None,
+      external_modified_at: None,
       schedule: None,
       start_at: 0,
       created_at: Utc::now(),

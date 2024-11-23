@@ -1,6 +1,6 @@
 use std::{collections::HashMap, env, sync::Arc};
 
-use chrono::{DateTime, Local, NaiveDateTime, TimeZone, Timelike, Utc};
+use chrono::{DateTime, FixedOffset, Local, NaiveDateTime, TimeZone, Timelike, Utc};
 use chrono_tz::Tz;
 use curl::easy::{Auth, Easy2, Handler, List, WriteError};
 use regex::Regex;
@@ -214,6 +214,8 @@ impl<'a> EventProcessor<'a> {
     let options = self.parse_event_options(&event)?;
     let project = self.get_project_from_options(&options, projects)?;
     let start_time = self.parse_event_time(&event)?;
+    let modified_at: DateTime<FixedOffset> = DateTime::parse_from_rfc3339(&event.last_modified)
+      .map_err(|e| ServiceError::parse_error(format!("Invalid datetime format: {}", e)))?;
 
     let task_params = crate::mutation::tasks::CreateTaskParams {
       name: event.subject.clone(),
@@ -221,6 +223,7 @@ impl<'a> EventProcessor<'a> {
       schedule: None,
       project_id: project.id,
       external_id: Some(event.id.clone()),
+      external_modified_at: Some(modified_at.to_utc()),
       start_at: start_time.timestamp() as i32,
       options: serde_json::to_value(options)
         .map_err(|e| ServiceError::parse_error(format!("Failed to parse task options: {}", e)))?,
