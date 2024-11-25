@@ -205,6 +205,7 @@ impl Gerrit {
       .action_system
       .process(Action {
         name: ZULIP.to_string(),
+        task_id: task.id,
         options: json!({
           "message": message,
           "channel": channel,

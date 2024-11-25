@@ -9,6 +9,7 @@ use serde_json::{json, Value};
 use strfmt::strfmt;
 use thiserror::Error;
 use tracing::{debug, error, instrument, warn};
+use uuid::Uuid;
 
 use crate::executor::{
   actions::{zulip::ZULIP, Action, ActionSystem},
@@ -160,9 +161,10 @@ impl TeamCity {
   }
 
   /// Creates a notification action from the config
-  fn create_notification_action(&self, message: String, config: NotificationConfig) -> Action {
+  fn create_notification_action(&self, task_id: Uuid, message: String, config: NotificationConfig) -> Action {
     Action {
       name: ZULIP.to_string(),
+      task_id,
       options: json!({
         "message": message,
         "channel": config.channel,
@@ -186,7 +188,7 @@ impl TeamCity {
       anyhow!(e)
     })?;
 
-    let action = self.create_notification_action(message, config);
+    let action = self.create_notification_action(task.id, message, config);
 
     self.action_system.process(action).await.map_err(|e| anyhow!(e))
   }

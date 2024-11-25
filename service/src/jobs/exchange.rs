@@ -137,7 +137,7 @@ impl ExchangeClient {
       end.format("%Y-%m-%dT%H:%M:%S"),
     );
 
-    info!("Request url: {}", url);
+    debug!("Request url: {}", url);
 
     self
       .client

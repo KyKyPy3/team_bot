@@ -5,6 +5,7 @@ use async_trait::async_trait;
 use serde_json::{json, Value};
 use thiserror::Error;
 use tracing::{debug, error, instrument};
+use uuid::Uuid;
 
 use super::Worker;
 use crate::executor::actions::{zulip::ZULIP, Action, ActionSystem};
@@ -53,9 +54,10 @@ impl Notifier {
   }
 
   /// Creates a notification action from the config
-  fn create_notification_action(&self, config: NotificationConfig) -> Action {
+  fn create_notification_action(&self, task_id: Uuid, config: NotificationConfig) -> Action {
     Action {
       name: ZULIP.to_string(),
+      task_id,
       options: json!({
         "message": config.text,
         "channel": config.channel,
@@ -77,7 +79,7 @@ impl Worker for Notifier {
       anyhow!(e)
     })?;
 
-    let action = self.create_notification_action(config);
+    let action = self.create_notification_action(task.id, config);
 
     self.action_system.process(action).await.map_err(|e| {
       error!("Failed to process notification: {}", e);

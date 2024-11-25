@@ -6,13 +6,15 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use tokio_util::sync::CancellationToken;
 use tracing::{error, info, warn};
+use uuid::Uuid;
 use zulip::ZulipOutput;
 
 pub mod zulip;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Action {
   pub name: String,
+  pub task_id: Uuid,
   pub options: String,
 }
 

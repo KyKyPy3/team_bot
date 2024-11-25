@@ -111,10 +111,13 @@ impl ExecutorSystem {
   #[instrument(level = "debug", skip(self, cancel_token))]
   pub async fn run(self, cancel_token: CancellationToken) -> Result<()> {
     let mut handlers = vec![];
+    info!("Starting executor...");
 
     self.action_system.run(cancel_token.clone()).await?;
     handlers.push(self.spawn_task_poller(cancel_token.clone()));
     handlers.extend(self.spawn_workers(cancel_token));
+
+    info!("Executor started");
 
     futures::future::join_all(handlers).await;
     info!("Executor system stopped");
@@ -127,34 +130,44 @@ impl ExecutorSystem {
     let tx = self.tx.clone();
 
     tokio::spawn(async move {
+      info!("Task poller started");
+
       while !cancel_token.is_cancelled() {
         tokio::select! {
-            _ = sleep(QUERY_TIMEOUT) => {
-                match query::tasks::get_tasks_to_run(&pool).await {
-                    Ok(tasks) => {
-                        debug!("Found {} tasks to run", tasks.len());
-                        for task in tasks {
-                            if let Err(e) = tx.send(task).await {
-                                error!("Failed to send task to executor: {}", e);
-                            }
-                        }
-                    },
-                    Err(e) => error!("Failed to get tasks to run: {}", e),
+          _ = sleep(QUERY_TIMEOUT) => {
+            debug!("Start polling task from db...");
+
+            match query::tasks::get_tasks_to_run(&pool).await {
+              Ok(tasks) => {
+                debug!("Found {} tasks to run", tasks.len());
+                for task in tasks {
+                  if let Err(e) = tx.send(task).await {
+                    error!("Failed to send task to executor: {}", e);
+                  }
                 }
+              },
+              Err(e) => error!("Failed to get tasks to run: {}", e),
             }
-            _ = cancel_token.cancelled() => {
-                info!("Task poller stopped");
-                break;
-            }
+          }
+          _ = cancel_token.cancelled() => {
+            info!("Task poller stopped");
+            break;
+          }
         }
       }
     })
   }
 
   fn spawn_workers(&self, cancel_token: CancellationToken) -> Vec<tokio::task::JoinHandle<()>> {
-    (0..self.config.num_workers)
+    info!("Starting {} workers...", self.config.num_workers);
+
+    let handlers = (0..self.config.num_workers)
       .map(|id| self.spawn_worker(id, cancel_token.clone()))
-      .collect()
+      .collect();
+
+    info!("Workers started");
+
+    handlers
   }
 
   #[instrument(level = "debug", skip(self, cancel_token))]
@@ -168,17 +181,17 @@ impl ExecutorSystem {
         let mut rx = rx.lock().await;
 
         tokio::select! {
-            Some(task) = rx.recv() => {
-                debug!("Worker {} received task {:?}", id, task);
+          Some(task) = rx.recv() => {
+            debug!("Worker {} received task {:?}", id, task);
 
-                if let Err(e) = Self::process_task(&pool, &workers, task).await {
-                    error!("Worker {} failed to process task: {}", id, e);
-                }
+            if let Err(e) = Self::process_task(&pool, &workers, task).await {
+              error!("Worker {} failed to process task: {}", id, e);
             }
-            _ = cancel_token.cancelled() => {
-                info!("Worker {} stopped", id);
-                break;
-            }
+          }
+          _ = cancel_token.cancelled() => {
+            info!("Worker {} stopped", id);
+            break;
+          }
         }
       }
     })
