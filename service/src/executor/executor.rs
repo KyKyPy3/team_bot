@@ -252,12 +252,35 @@ fn calculate_next_run(task: &Task) -> Result<i32> {
 }
 
 fn calculate_interval_next_run(schedule: &str, start_at: DateTime<Utc>) -> Result<i32> {
-  let duration_str = schedule.trim_start_matches("@every ");
-  let duration = duration_str::parse(duration_str).map_err(|e| anyhow!("Failed to parse duration: {}", e))?;
+  // Extract interval duration from schedule string
+  let duration_str = schedule
+    .strip_prefix("@every ")
+    .ok_or_else(|| anyhow!("Invalid schedule format: must start with '@every'"))?;
 
-  let duration = chrono::Duration::from_std(duration).context("Failed to convert duration")?;
+  // Parse duration string into std::time::Duration
+  let std_duration = duration_str::parse(duration_str).map_err(|e| anyhow!("Failed to parse duration: {}", e))?;
 
-  Ok((start_at.timestamp() + duration.num_seconds()) as i32)
+  // Convert to chrono::Duration
+  let interval = chrono::Duration::from_std(std_duration).context("Failed to convert to chrono duration")?;
+
+  // Calculate timestamps
+  let current_time = Utc::now().timestamp();
+  let start_time = start_at.timestamp();
+  let interval_seconds = interval.num_seconds();
+
+  // Ensure interval_seconds is not zero to avoid division by zero
+  if interval_seconds == 0 {
+    return Err(anyhow!("Interval duration cannot be zero"));
+  }
+
+  // Calculate number of intervals passed since start
+  let intervals_passed = (current_time - start_time) / interval_seconds + 1;
+
+  // Calculate next run timestamp
+  let next_run = start_time + (intervals_passed * interval_seconds);
+
+  // Convert to i32, checking for overflow
+  next_run.try_into().context("Next run timestamp exceeds i32 range")
 }
 
 fn calculate_cron_next_run(schedule: &str, start_at: DateTime<Utc>) -> Result<i32> {
