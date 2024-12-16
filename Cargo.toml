@@ -18,6 +18,7 @@ sqlx = { version = "0.8.2", features = [
   "runtime-tokio",
   "tls-native-tls",
 ] }
+openssl-sys = { version = "0.9", features = ["vendored"] }
 tokio = { version = "1.41.1", features = ["full", "tracing"] }
 tokio-util = "0.7.12"
 tracing = { version = "0.1.40", features = ["attributes"] }

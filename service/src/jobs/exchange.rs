@@ -336,7 +336,7 @@ pub async fn run(pool: Arc<SqlitePool>, cancel_token: CancellationToken) -> anyh
         match client.fetch_events(start.into(), end.into()).await {
           Ok(response) => {
             if response.value.len() == 0 {
-              warn!("Not found events in exchange");
+              debug!("Not found events in exchange");
             }
 
             if let Err(e) = processor.process_events(response.value).await {
